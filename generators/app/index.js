@@ -42,17 +42,22 @@ umicmsExtensionGenerator.prototype.askFor = function askFor() {
 		{
 			name: 'title',
 			message: 'What is the title of the new UMI.CMS module extension?',
-			default: 'My Module Title'
+			default: 'My Module Extension Title'
 		},
 		{
 			name: 'name',
-			message: 'What is the name (slug) of the new UMI.CMS module?',
-			default: 'my_module_name'
+			message: 'What is the name (slug) of the new UMI.CMS module extension?',
+			default: 'myExtensionName'
 		},
 		{
 			name: 'moduleDescription',
 			message: 'Give me a description on what your module extension is supposed to do',
 			default: 'A sample description for UMI.CMS module extension'
+		},
+		{
+			name: 'needAdminStyles',
+			message: 'Do you need adminzone XSLT styles to be generated?',
+			default: 'y'
 		},
 
 		//author and header info
@@ -108,6 +113,7 @@ umicmsExtensionGenerator.prototype.askFor = function askFor() {
 			lower		: true
 		});
 		this.moduleDescription	= props.moduleDescription;
+		this.needAdminStyles	= props.needAdminStyles;
 		this.authorName			= props.authorName;
 		this.authorEmail		= props.authorEmail;
 		this.authorURL			= props.authorURL;
@@ -123,31 +129,38 @@ umicmsExtensionGenerator.prototype.askFor = function askFor() {
 umicmsExtensionGenerator.prototype.classesFiles = function classesFiles() {
 	var destModulePath = this.destRootPath + 'classes/modules/' + this.safeModuleName + '/ext';
 
-	// main files
-	this.template('ext/_site.php',           	destModulePath + '/site.' + this.safeExtensionName + '.php');
-	this.template('ext/_admin.php',           	destModulePath + '/admin.' + this.safeExtensionName + '.php');
-	this.template('ext/_common.php',           	destModulePath + '/common.' + this.safeExtensionName + '.php');
-	this.template('ext/_event_handlers.php',  	destModulePath + '/__events.' + this.safeExtensionName + '.php');
+	if(this.safeModuleName !== '' && this.safeExtensionName !== ''){
 
-	this.template('ext/_events.php',        	destModulePath + '/events.' + this.safeExtensionName + '.php');
+		// main files
+		this.template('ext/_site.php',           	destModulePath + '/site.' + this.safeExtensionName + '.php');
+		this.template('ext/_admin.php',           	destModulePath + '/admin.' + this.safeExtensionName + '.php');
+		this.template('ext/_common.php',           	destModulePath + '/common.' + this.safeExtensionName + '.php');
+		this.template('ext/_event_handlers.php',  	destModulePath + '/__events.' + this.safeExtensionName + '.php');
 
-	this.copy('ext/permissions.php',          	destModulePath + '/permissions.' + this.safeExtensionName + '.php');
+		this.template('ext/_events.php',        	destModulePath + '/events.' + this.safeExtensionName + '.php');
 
-	// langs
-	this.template('ext/_i18n.ru.php',        	destModulePath + '/i18n.' + this.safeExtensionName + '.ru.php');
-	this.template('ext/_i18n.en.php',         	destModulePath + '/i18n.' + this.safeExtensionName + '.en.php');
-	this.template('ext/_lang.ru.php',     		destModulePath + '/lang.' + this.safeExtensionName + '.ru.php');
-	this.template('ext/_lang.en.php',      		destModulePath + '/lang.' + this.safeExtensionName + '.en.php');
+		this.copy('ext/permissions.php',          	destModulePath + '/permissions.' + this.safeExtensionName + '.php');
+
+		// langs
+		this.template('ext/_i18n.ru.php',        	destModulePath + '/i18n.' + this.safeExtensionName + '.ru.php');
+		this.template('ext/_i18n.en.php',         	destModulePath + '/i18n.' + this.safeExtensionName + '.en.php');
+		this.template('ext/_lang.ru.php',     		destModulePath + '/lang.' + this.safeExtensionName + '.ru.php');
+		this.template('ext/_lang.en.php',      		destModulePath + '/lang.' + this.safeExtensionName + '.en.php');
+	}
+	else{
+		console.log('wrong module or extension name!');
+	}
 
 };
 
 umicmsExtensionGenerator.prototype.stylesAdminFiles = function stylesAdminFiles() {
 	var destStylesPath = this.destRootPath + 'styles/skins/mac/data/modules/' + this.safeModuleName + '/ext';
 
-	this.template('styles/_formModify.xsl',       destStylesPath + '/form.modify.' + this.safeExtensionName + '.xsl');
-	this.template('styles/_listView.xsl',         destStylesPath + '/list.view.' + this.safeExtensionName + '.xsl');
-	this.template('styles/_listModify.xsl',       destStylesPath + '/list.modify.' + this.safeExtensionName + '.xsl');
-	this.template('styles/_settingsView.xsl',     destStylesPath + '/settings.view.' + this.safeExtensionName + '.xsl');
-	this.template('styles/_settingsModify.xsl',   destStylesPath + '/settings.modify.' + this.safeExtensionName + '.xsl');
-
+	if(this.needAdminStyles === 'y' || this.needAdminStyles === 'yes'){
+		this.template('styles/ext/_formModify.xsl',       destStylesPath + '/form.modify.' + this.safeExtensionName + '.xsl');
+		this.template('styles/ext/_listView.xsl',         destStylesPath + '/list.view.' + this.safeExtensionName + '.xsl');
+		this.template('styles/ext/_listModify.xsl',       destStylesPath + '/list.modify.' + this.safeExtensionName + '.xsl');
+		this.template('styles/ext/_settingsView.xsl',     destStylesPath + '/settings.view.' + this.safeExtensionName + '.xsl');
+		this.template('styles/ext/_settingsModify.xsl',   destStylesPath + '/settings.modify.' + this.safeExtensionName + '.xsl');
+	}
 };
