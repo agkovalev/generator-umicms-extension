@@ -132,12 +132,12 @@ umicmsExtensionGenerator.prototype.classesFiles = function classesFiles() {
 	if(this.safeModuleName !== '' && this.safeExtensionName !== ''){
 
 		// main files
-		this.template('ext/_site.php',           	destModulePath + '/site.' + this.safeExtensionName + '.php');
-		this.template('ext/_admin.php',           	destModulePath + '/admin.' + this.safeExtensionName + '.php');
-		this.template('ext/_common.php',           	destModulePath + '/common.' + this.safeExtensionName + '.php');
-		this.template('ext/_event_handlers.php',  	destModulePath + '/__events.' + this.safeExtensionName + '.php');
+		this.template('ext/_site.php',           	destModulePath + '/site_' + this.safeExtensionName + '.php');
+		this.template('ext/_admin.php',           	destModulePath + '/admin_' + this.safeExtensionName + '.php');
+		this.template('ext/_common.php',           	destModulePath + '/common_' + this.safeExtensionName + '.php');
+		this.template('ext/_event_handlers.php',  	destModulePath + '/__events_' + this.safeExtensionName + '.php');
 
-		this.template('ext/_events.php',        	destModulePath + '/events.' + this.safeExtensionName + '.php');
+		this.template('ext/_events.php',        	destModulePath + '/events_' + this.safeExtensionName + '.php');
 
 		this.copy('ext/permissions.php',          	destModulePath + '/permissions.' + this.safeExtensionName + '.php');
 
